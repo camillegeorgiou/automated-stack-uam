@@ -1,0 +1,50 @@
+{
+  "trigger": {
+    "schedule": {
+      "interval": "1s"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "search_type": "query_then_fetch",
+        "indices": [
+          "kibana_objects-01"
+        ],
+        "rest_total_hits_as_int": true,
+        "body": {
+          "query": {
+            "range": {
+              "@updated_at": {
+                "gte": "now-1m"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "always": {}
+  },
+  "actions": {
+    "reindex": {
+      "webhook": {
+        "scheme": "https",
+        "host": "{{ monitoring_cluster_host }}",
+        "port": 9243,
+        "method": "PUT",
+        "path": "_enrich/policy/objectid-policy/_execute",
+        "params": {},
+        "headers": {
+          "Authorization": "ApiKey {{ mon_cluster_api_key}}"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "xpack": {
+      "type": "json"
+    }
+  }
+}

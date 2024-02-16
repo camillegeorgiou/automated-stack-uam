@@ -1,0 +1,25 @@
+{
+  "main_cluster": {
+    "cloud_id": "cloud_id",
+    "api_key": "api_key"
+  },
+  "monitoring_cluster": {
+    "cloud_id": "cloud_id",
+    "api_key": "api_key"
+  },
+  "watcher_main" : {
+    "host": "main_cluster_endpoint:port",
+    "api_key": "api_key"
+  },
+  "remote_cluster": {
+    "remote_host": "main_cluster_endpoint",
+    "remote_port": "port",
+    "proxy_address": "main_cluster_endpoint:port",
+    "server_name": "main_cluster_endpoint"
+  },
+  "watcher_monitoring" : {
+    "host": "monitoring_cluster_endpoint:port",
+    "api_key": "api_key"
+  }
+}
+
