@@ -31,13 +31,13 @@
     "reindex": {
       "webhook": {
         "scheme": "https",
-        "host": "{{ monitoring_cluster_host }}",
+        "host": "{{ host }}",
         "port": 9243,
         "method": "PUT",
         "path": "_enrich/policy/objectid-policy/_execute",
         "params": {},
         "headers": {
-          "Authorization": "ApiKey {{ mon_cluster_api_key}}"
+          "Authorization": "ApiKey {{ api_key }}"
         }
       }
     }

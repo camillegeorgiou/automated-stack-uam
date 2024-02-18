@@ -10,7 +10,6 @@ def main():
     config = load_config()
     
     # Setup main cluster and monitoring cluster
-    
     setup_main_cluster(config) 
     setup_monitoring_cluster(config)
 

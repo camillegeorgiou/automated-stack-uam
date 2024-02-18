@@ -2,16 +2,92 @@
 
 This package deploys the end-to-end assets to enable end-user activity monitoring.
 
-The init_main_cluster and init_monitoring_cluster scripts set up each cluster, respectively.
+The init_main_cluster and init_monitoring_cluster python scripts set up each cluster, respectively with neccessary assets to enable end-user access monitoring.
 
 Some manual steps are still required:
 
-1. Enable auditing at the deployment level, as per instructions 1&2 in the main repo.
+1. Enable auditing at the deployment level, as per instructions 1&2 in the main repo: https://github.com/elastic/stack-uam
 
-1. Update the clusters_config.json file to include values for each of the variables.
+2. Update the clusters_config.json file to include values for each of the variables:
 
-2. Run pip install -r requirements.txt
 
-3. Run 'python main.py'
+```
+{
+    "main_cluster": {
+      "cloud_id": "main_cluster_cloud_id",
+      "api_key": "main_cluster_api_key"
+    },
+    "monitoring_cluster": {
+      "cloud_id": "monitoring_cluster_cloud_id",
+      "api_key": "monitoring_cluster_api_key"
+    },
+    "watcher_main" : {
+      "host": "monitoring_cluster_endpoint",
+      "api_key": "api_key"
+    },
+    "remote_cluster": {
+      "proxy_address": "main_cluster_endpoint:port",
+      "server_name": "main_cluster_endpoint"
+    },
+    "watcher_monitoring" : {
+      "host": "monitoring_cluster_endpoint",
+      "api_key": "api_key"
+    }
+  }
+  
+```
 
-4. Import the dashboards located in: kibana_assets 
+**Notes:**
+
+- Cross-cluster trust must be set-up for cross-cluster enablement:
+
+![cross-cluster-trust](images/remote_connections.png)
+
+
+- API keys for "main_cluster" and "monitoring_cluster" will require elevated cluster permissions to perform actions. Temporary keys can be created to perform cluster set-up tasks.
+
+```
+POST /_security/api_key
+{
+  "name": "cluster-setup-api-key",
+  "expiration": "1d", 
+  "role_descriptors": {
+    "superuser": {
+      "cluster": ["all"],
+      "index": [
+        {
+          "names": ["*"],
+          "privileges": ["all"]
+        }
+      ]
+    }
+  }
+}
+```
+
+- API keys for the watchers need to be persistant, but do not require the same priviledges. Note - the .kibana_analytics index is a system index, and therefore 'allow_restricted_indices' must be set to true.
+
+```
+POST /_security/api_key
+{
+  "name": "system_index_access_key",
+  "role_descriptors": {
+    "system_index_access": {
+      "cluster": [],
+      "index": [
+        {
+          "names": [".kibana_analytics*", "kibana_objects-01"],
+          "privileges": ["all"],
+          "allow_restricted_indices": true
+        }
+      ]
+    }
+  }
+}
+```
+
+3. Run pip install -r requirements.txt
+
+4. Run 'python main.py'
+
+5. Import the dashboards located in: kibana_assets 
