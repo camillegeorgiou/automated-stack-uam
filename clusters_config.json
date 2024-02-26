@@ -1,23 +1,23 @@
 {
     "main_cluster": {
-      "cloud_id": "main_cluster_cloud_id",
-      "api_key": "main_cluster_api_key"
+      "cloud_id": "Millie-CA-Onboarding:ZXUtd2VzdC0yLmF3cy5jbG91ZC5lcy5pbzo0NDMkZjU1MzBiYmUyODI2NDA1YmEyNWJmZTRlZTg3OWEwMjckYjQyMjE2OWZhZTc1NDZhMTkzM2RiYzRjMTZiMjFkNjc=",
+      "api_key": "aU9BbDVvMEJBLV9XRWxNdjdMUHE6NkVJQjAzellSVy1EX3pRSWxheE1EZw=="
     },
     "monitoring_cluster": {
-      "cloud_id": "monitoring_cluster_cloud_id",
-      "api_key": "monitoring_cluster_api_key"
+      "cloud_id": "Millie-CA-Onboarding-2:ZXUtd2VzdC0yLmF3cy5jbG91ZC5lcy5pbzo0NDMkOTZiMjdiMGIwNjMzNDdmMzgwNjVmMGYxZmQzZjU3NjAkNTE3MTgxN2E3NDJhNDcwMzhhMzc2NTdmZjI4Mzc2ZTM=",
+      "api_key": "YjhmajVZMEIzcGtNRkN4MHFEcU86SHhad3Q2ampUdk8xbjJzY3ZHYjlzZw=="
     },
     "watcher_main" : {
-      "host": "monitoring_cluster_endpoint",
-      "api_key": "api_key"
+      "host": "millie-ca-onboarding.es.eu-west-2.aws.cloud.es.io",
+      "api_key": "SHNVaTVvMEJraTVMaTZFMENsMUk6ZjktUWtEaE5TTXlWUW1DUVJNbi1Gdw=="
     },
     "remote_cluster": {
-      "proxy_address": "main_cluster_endpoint:port",
-      "server_name": "main_cluster_endpoint"
+      "proxy_address": "millie-ca-onboarding.es.eu-west-2.aws.cloud.es.io:9400",
+      "server_name": "millie-ca-onboarding.es.eu-west-2.aws.cloud.es.io"
     },
     "watcher_monitoring" : {
-      "host": "monitoring_cluster_endpoint",
-      "api_key": "api_key"
+      "host": "millie-ca-onboarding-2.es.eu-west-2.aws.cloud.es.io",
+      "api_key": "eE1VZDVvMEJraTVMaTZFMERGeUo6bUN2Q2RzYWVScXFEYVpnUFYxUlhGQQ=="
     }
   }
   
