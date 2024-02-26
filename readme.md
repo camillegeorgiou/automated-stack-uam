@@ -37,8 +37,6 @@ Some manual steps are still required:
   
 ```
 
-
-
 **Notes:**
 
 - For the watcher / remote cluster endpoints, do not include "https://", i.e the endpoints should follow the convention: `my-cluster.es.eu-west-2.aws.cloud.es.io`
