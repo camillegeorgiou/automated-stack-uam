@@ -22,7 +22,7 @@ Some manual steps are still required:
       "api_key": "monitoring_cluster_api_key"
     },
     "watcher_main" : {
-      "host": "monitoring_cluster_endpoint",
+      "host": "main_cluster_endpoint",
       "api_key": "api_key"
     },
     "remote_cluster": {
@@ -37,27 +37,45 @@ Some manual steps are still required:
   
 ```
 
+
+
 **Notes:**
+
+- For the watcher / remote cluster endpoints, do not include "https://", i.e the endpoints should follow the convention: `my-cluster.es.eu-west-2.aws.cloud.es.io`
+
+- For the remote cluster set-up, the proxy_address / server_name is the same as your main_cluster_endpoint used for the watcher. The port is '9400' i.e
+
+```
+      "proxy_address": "my-cluster.es.eu-west-2.aws.cloud.es.io:9400",
+      "server_name": "my-cluster.es.eu-west-2.aws.cloud.es.io"
+```
 
 - Cross-cluster trust must be set-up for cross-cluster enablement:
 
 ![cross-cluster-trust](images/remote_connections.png)
 
 
-- API keys for "main_cluster" and "monitoring_cluster" will require elevated cluster permissions to perform actions. Temporary keys can be created to perform cluster set-up tasks.
+- API keys for "main_cluster" and "monitoring_cluster" will require elevated cluster permissions to perform actions. Temporary keys can be created to perform cluster set-up tasks. Run the following command in Dev Tools in both clusters and copy the generated encoded keys.
 
 ```
 POST /_security/api_key
 {
   "name": "cluster-setup-api-key",
-  "expiration": "1d", 
+  "expiration": "1d",
   "role_descriptors": {
     "superuser": {
-      "cluster": ["all"],
+      "cluster": [
+        "all"
+      ],
       "index": [
         {
-          "names": ["*"],
-          "privileges": ["all"]
+          "names": [
+            "*"
+          ],
+          "privileges": [
+            "all"
+          ],
+          "allow_restricted_indices": true
         }
       ]
     }
@@ -66,6 +84,8 @@ POST /_security/api_key
 ```
 
 - API keys for the watchers need to be persistant, but do not require the same priviledges. Note - the .kibana_analytics index is a system index, and therefore 'allow_restricted_indices' must be set to true.
+
+For the main cluster watcher:
 
 ```
 POST /_security/api_key
@@ -77,6 +97,27 @@ POST /_security/api_key
       "index": [
         {
           "names": [".kibana_analytics*", "kibana_objects-01"],
+          "privileges": ["all"],
+          "allow_restricted_indices": true
+        }
+      ]
+    }
+  }
+}
+```
+
+For the monitoring cluster watcher:
+
+```
+POST /_security/api_key
+{
+  "name": "enrich_access_key",
+  "role_descriptors": {
+    "system_index_access": {
+      "cluster": ["manage_enrich"],
+      "index": [
+        {
+          "names": ["kibana_objects-01"],
           "privileges": ["all"],
           "allow_restricted_indices": true
         }
