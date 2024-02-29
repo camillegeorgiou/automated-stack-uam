@@ -54,7 +54,18 @@
           },
           {
             "match_phrase": {
-              "kibana.saved_object.type.keyword": ""
+              "kibana.saved_object.type.keyword": "security-rule"
+            }
+          },
+          {
+            "match_phrase": {
+              "kibana.saved_object.type.keyword": "infrastructure-ui-source"
+            }
+          },
+
+          {
+            "match_phrase": {
+              "kibana.saved_object.type.keyword": "infrastructure-monitoring-log-view"
             }
           }
         ]

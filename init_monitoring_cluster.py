@@ -1,6 +1,7 @@
 from elasticsearch import Elasticsearch
 import json
 from jinja2 import Template
+import time
 
 
 def setup_monitoring_cluster(config):
@@ -48,12 +49,13 @@ def setup_monitoring_cluster(config):
     es.transform.put_transform(transform_id="kibana-transform-01", body=template_body)
     print("Transform created in monitoring cluster.")
 
-    es.transform.start_transform(transform_id="kibana-transform-01")
-    print("Transform started")
-
     # Set-up watcher in mon cluster
     setup_watcher_with_jinja(es, config, '_meta/monitoring_cluster/watcher.json')
+    time.sleep(10)
 
+    es.transform.start_transform(transform_id="kibana-transform-01")
+    print("Transform started")
+    
     return es
 
 def setup_remote_settings_with_jinja(es, config, remote_settings_path):
