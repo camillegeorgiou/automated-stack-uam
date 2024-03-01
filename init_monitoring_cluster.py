@@ -22,6 +22,8 @@ def setup_monitoring_cluster(config):
     es.enrich.put_policy(name="objectid-policy", body=enrich_body)
     print("Enrich policy created")
 
+    time.sleep(10)
+
     es.enrich.execute_policy(name="objectid-policy", wait_for_completion=True)
     print("Enrich policy executed")
 
