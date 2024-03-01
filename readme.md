@@ -124,11 +124,11 @@ POST /_security/api_key
   }
 }
 ```
-3. Create a virtual Python environment to run your code: 'python3 -m venv myenv'
+3. Create a virtual Python environment to run your code: 'python3 -m venv myenv /path/to/uam-repo'
 
 4. Run 'pip uninstall -r uninstall_requirements.txt' and 'pip install -r requirements.txt'
 This will install the required packlages and uninstall a conflicting version of markdown safe.
 
 5. Run 'python main.py'
 
-6. Import the dashboards located in: kibana_assets 
+6. Import the dashboards located in: kibana_assets

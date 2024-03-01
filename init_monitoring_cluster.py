@@ -51,10 +51,21 @@ def setup_monitoring_cluster(config):
 
     # Set-up watcher in mon cluster
     setup_watcher_with_jinja(es, config, '_meta/monitoring_cluster/watcher.json')
-    time.sleep(10)
+    time.sleep(30)
 
     es.transform.start_transform(transform_id="kibana-transform-01")
     print("Transform started")
+
+     # Check if a certain field exists
+    if not check_field_exists(es, config, index="kibana-transform-01", field_name="object_title"):
+        es.transform.stop_transform(transform_id="kibana-transform-01", wait_for_completion=True)
+        print("Transform stopped because the required field does not exist.")
+        
+        es.transform.reset_transform(transform_id="kibana-transform-01")
+        print("Transform reset.")
+        
+        es.transform.start_transform(transform_id="kibana-transform-01")
+        print("Transform restarted after resetting.")
     
     return es
 
@@ -83,3 +94,16 @@ def setup_watcher_with_jinja(es, config, watcher_template_path):
     watcher_config = json.loads(watcher_config_str)
     es.watcher.put_watch(id="policy-execute", body=watcher_config)
     print("Watcher setup in mon cluster.")
+
+def check_field_exists(es, config, index, field_name):
+    es = Elasticsearch(cloud_id=config['monitoring_cluster']['cloud_id'], api_key=config['monitoring_cluster']['api_key'])
+    body = {
+        "query": {
+            "exists": {
+                "field": field_name
+            }
+        },
+        "size": 0
+    }
+    response = es.search(index=index, body=body)
+    return response['hits']['total']['value'] > 0
