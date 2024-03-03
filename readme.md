@@ -130,7 +130,7 @@ POST /_security/api_key
 
 5. Run 'pip uninstall -r uninstall_requirements.txt' and 'pip install -r requirements.txt'
 This will install the required packlages and uninstall a conflicting version of markdown safe, if it exists.
-
-6. Run 'python3 main.py' (from the root folder)
+ 
+6. Run 'python3 main.py' (from the root folder). If the script fails, attempt to diagnose and re-run. 
 
 7. Import the dashboards located in: kibana_assets.
