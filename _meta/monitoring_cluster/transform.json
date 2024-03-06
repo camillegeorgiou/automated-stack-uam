@@ -84,7 +84,8 @@
   },
   "sync": {
     "time": {
-      "field": "@timestamp"
+      "field": "@timestamp",
+      "delay": "300s"
     }
   }
 }
