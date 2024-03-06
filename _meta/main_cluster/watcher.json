@@ -1,7 +1,7 @@
 {
     "trigger": {
         "schedule": {
-            "interval": "1s"
+            "interval": "5m"
         }
     },
     "input": {
@@ -16,7 +16,7 @@
                     "query": {
                         "range": {
                             "@updated_at": {
-                                "gte": "now-1m"
+                                "gte": "now-5m"
                             }
                         }
                     }
