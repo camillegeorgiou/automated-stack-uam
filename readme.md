@@ -134,3 +134,9 @@ This will install the required packlages and uninstall a conflicting version of 
 6. Run 'python3 main.py' (from the root folder). If the script fails, attempt to diagnose and re-run. 
 
 7. Import the dashboards located in: kibana_assets.
+
+8. Verify dashboards have been populated with data as below:
+   - Additional images are located in the /images folder
+
+   <img width="1727" alt="UAM Overview" src="https://github.com/camillegeorgiou/automated-stack-uam/assets/72489892/6fd6fa82-dce9-4f59-8d49-3d9ce8ac54b3">
+
