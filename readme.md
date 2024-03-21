@@ -6,9 +6,36 @@ The init_main_cluster and init_monitoring_cluster python scripts set up each clu
 
 Some manual steps are still required:
 
-1. Enable auditing at the deployment level, as per instructions 1&2 in the main repo: https://github.com/elastic/stack-uam
+1. Enable audit logging for both Elasticsearch and Kibana in your production deployment.
 
-2. Update the clusters_config.json file to include values for each of the variables:
+-> Elasticsearch
+
+Edit your deployment and add the following setting within Manage user settings and extensions for Elasticsearch:
+xpack.security.audit.enabled: true
+xpack.security.audit.logfile.events.include: "authentication_success"
+xpack.security.audit.logfile.events.emit_request_body: true
+xpack.security.audit.logfile.events.ignore_filters.system.users: ["*_system", "found-internal-*",  "_xpack_security", "_xpack", "elastic/fleet-server","_async_search", "found-internal-admin-proxy"]
+xpack.security.audit.logfile.events.ignore_filters.realm.realms : [ "_es_api_key" ]
+xpack.security.audit.logfile.events.ignore_filters.internal_system.indices : ["*ml-inference-native-*", "*monitoring-es-*"]
+
+-> Kibana
+
+Continue editing your deployment and this time add the following setting within Edit user settings for Kibana:
+xpack.security.audit.enabled: true
+xpack.security.audit.ignore_filters:
+- categories: [web]
+- actions: [saved_object_open_point_in_time, saved_object_close_point_in_time, saved_object_find, space_get, saved_object_create]
+Save and restart the deployment for the new settings to take effect.
+
+-> Validate
+
+In the monitoring deployment, create a new Data View with the following settings, and ensure data is flowing for both the Elasticsearch and Kibana audit log datasets (e.g. event.dataset: elasticsearch):
+
+Name: elastic-cloud-logs
+Index pattern: elastic-cloud-logs*
+Timestamp field: @timestamp
+
+3. Update the clusters_config.json file to include values for each of the variables:
 
 
 ```
