@@ -1,4 +1,5 @@
 from elasticsearch import Elasticsearch
+from elasticsearch.exceptions import NotFoundError
 import json
 from jinja2 import Template
 import time
@@ -13,9 +14,15 @@ def index_exists(es, index_name):
 
 def enrich_policy_exists(es, policy_name):
     try:
-        es.enrich.get_policy(name=policy_name)
-        return True
-    except Exception:
+        response = es.enrich.get_policy(name=policy_name)
+        if policy_name in response:
+            return True
+        else:
+            return False
+    except NotFoundError:
+        return False
+    except Exception as e:
+        print(f"An unexpected error occurred while checking for the enrich policy {policy_name}: {e}")
         return False
 
 def transform_exists(es, transform_id):

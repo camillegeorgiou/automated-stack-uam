@@ -25,6 +25,7 @@ xpack.security.audit.enabled: true
 xpack.security.audit.ignore_filters:
 - categories: [web]
 - actions: [saved_object_open_point_in_time, saved_object_close_point_in_time, saved_object_find, space_get, saved_object_create]
+
 Save and restart the deployment for the new settings to take effect.
 
 -> Validate
@@ -79,6 +80,7 @@ Timestamp field: @timestamp
 
 ![cross-cluster-trust](images/remote_connections.png)
 
+You can either establish trust at the organization level, or create trust between two specific deployments. If opting for the latter - trust must be established from **both** deployments. 
 
 - API keys for "main_cluster" and "monitoring_cluster" will require elevated cluster permissions to perform actions. Temporary keys can be created to perform cluster set-up tasks. Run the following command in Dev Tools in both clusters and copy the generated encoded keys.
 
