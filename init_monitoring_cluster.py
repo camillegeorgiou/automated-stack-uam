@@ -1,4 +1,5 @@
 from elasticsearch import Elasticsearch
+from elasticsearch import BadRequestError, Elasticsearch
 from elasticsearch.exceptions import NotFoundError
 import json
 from jinja2 import Template
@@ -15,10 +16,11 @@ def index_exists(es, index_name):
 def enrich_policy_exists(es, policy_name):
     try:
         response = es.enrich.get_policy(name=policy_name)
-        if policy_name in response:
-            return True
-        else:
-            return False
+        policies = response.get('policies', [])  # Get the list of policies in the response
+        for policy in policies:
+            if policy['name'] == policy_name:
+                return True
+        return False
     except NotFoundError:
         return False
     except Exception as e:
@@ -52,13 +54,16 @@ def setup_monitoring_cluster(config):
 
     # Put enrich processor
     policy_name = "objectid-policy"
-    if enrich_policy_exists(es, policy_name):
-        print("Enrich policy already exists")
-    else:
-        with open('_meta/monitoring_cluster/enrich.json') as f:
-            enrich_body = json.load(f)
-        es.enrich.put_policy(name=policy_name, body=enrich_body)
-        print("Enrich policy created")
+    try:
+        if not enrich_policy_exists(es, policy_name):
+            with open('_meta/monitoring_cluster/enrich.json') as f:
+                enrich_body = json.load(f)
+            es.enrich.put_policy(name=policy_name, body=enrich_body)
+            print("Enrich policy created")
+        else:
+            print("Enrich policy already exists")
+    except BadRequestError as e:
+        print(f"Attempted to create an enrich policy that already exists: {e}")
 
     time.sleep(10)
 
