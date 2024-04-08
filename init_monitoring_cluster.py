@@ -91,7 +91,7 @@ def setup_monitoring_cluster(config):
     # Set-up watcher in mon cluster
     setup_watcher_with_jinja(es, config, '_meta/monitoring_cluster/watcher.json')
         
-    transform_id = "kibana-transform-01"
+    transform_id = "kibana-transform-02"
     if transform_exists(es, transform_id):
         print("Transform already exists in monitoring cluster.")
     else:
@@ -99,20 +99,20 @@ def setup_monitoring_cluster(config):
             transform_body = json.load(f)
         es.transform.put_transform(transform_id=transform_id, body=transform_body)
         print("Transform created in monitoring cluster.")
-        es.transform.start_transform(transform_id="kibana-transform-01")
+        es.transform.start_transform(transform_id="kibana-transform-02")
         print("Transform started")
     
     time.sleep(30)
 
      # Check if a certain field exists
-    if not check_field_exists(es, config, index="kibana-transform-01", field_name="object_title"):
-        es.transform.stop_transform(transform_id="kibana-transform-01", wait_for_completion=True)
+    if not check_field_exists(es, config, index="kibana-transform-02", field_name="object_title"):
+        es.transform.stop_transform(transform_id="kibana-transform-02", wait_for_completion=True)
         print("Transform stopped because the required field does not exist.")
         
-        es.transform.reset_transform(transform_id="kibana-transform-01")
+        es.transform.reset_transform(transform_id="kibana-transform-02")
         print("Transform reset.")
         
-        es.transform.start_transform(transform_id="kibana-transform-01")
+        es.transform.start_transform(transform_id="kibana-transform-02")
         print("Transform restarted after resetting.")
     
     return es
